@@ -244,7 +244,7 @@ def test_2fa_removal(client, john_with_totp, token_state):
 
     # The only case when the TOTP device should be removed is when the token is correct.
     was_removed = not user.totpdevice_set.exists()
-    assert was_removed == (token_state == "correct" or token_state == "static")
+    assert was_removed == (token_state in ["correct", "static"])
 
 
 @pytest.mark.parametrize("next_via", ["get", "post"])

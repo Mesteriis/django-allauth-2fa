@@ -77,10 +77,8 @@ class OTPAdapter(DefaultAccountAdapter):
         # object, e.g. a UUID.
         request.session["allauth_2fa_user_id"] = str(user.id)
         login_kwargs = login_kwargs.copy()
-        signal_kwargs = login_kwargs.get("signal_kwargs")
-        if signal_kwargs:
-            sociallogin = signal_kwargs.get("sociallogin")
-            if sociallogin:
+        if signal_kwargs := login_kwargs.get("signal_kwargs"):
+            if sociallogin := signal_kwargs.get("sociallogin"):
                 signal_kwargs = signal_kwargs.copy()
                 signal_kwargs["sociallogin"] = sociallogin.serialize()
                 login_kwargs["signal_kwargs"] = signal_kwargs
@@ -90,9 +88,7 @@ class OTPAdapter(DefaultAccountAdapter):
         login_kwargs = request.session.pop("allauth_2fa_login", None)
         if login_kwargs is None:
             raise PermissionDenied()
-        signal_kwargs = login_kwargs.get("signal_kwargs")
-        if signal_kwargs:
-            sociallogin = signal_kwargs.get("sociallogin")
-            if sociallogin:
+        if signal_kwargs := login_kwargs.get("signal_kwargs"):
+            if sociallogin := signal_kwargs.get("sociallogin"):
                 signal_kwargs["sociallogin"] = SocialLogin.deserialize(sociallogin)
         return login_kwargs

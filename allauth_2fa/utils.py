@@ -31,6 +31,8 @@ def generate_totp_config_svg(device: Device, issuer: str, label: str) -> bytes:
 
 
 def user_has_valid_totp_device(user) -> bool:
-    if not user.is_authenticated:
-        return False
-    return user.totpdevice_set.filter(confirmed=True).exists()
+    return (
+        user.totpdevice_set.filter(confirmed=True).exists()
+        if user.is_authenticated
+        else False
+    )
